@@ -1,10 +1,24 @@
 {
-  "dependencies": {},
+  "name": "chatbot",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run index.ts",
+    "format": "prettier --write .",
+    "prepare": "husky"
+  },
   "devDependencies": {
+    "@types/bun": "latest",
+    "concurrently": "^9.2.1",
+    "prettier": "^3.6.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.6"
   },
-  "scripts": {
-    "prepare": "husky"
-  }
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
