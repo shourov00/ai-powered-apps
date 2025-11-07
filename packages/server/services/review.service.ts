@@ -8,6 +8,11 @@ export const reviewService = {
   },
 
   async summarizeReviews(productId: number): Promise<string> {
+    const existingSummary = await reviewRepository.getReviewSummary(productId)
+    if (existingSummary && existingSummary.expiresAt > new Date()) {
+      return existingSummary.content
+    }
+
     // Get the last 10 reviews
     // Send the reviews to a LLM for summarization
     const reviews = await reviewRepository.getReviews(productId, 10)
@@ -17,7 +22,10 @@ export const reviewService = {
       
       ${joinedReviews}
     `
-    const response = await llmClient.generateText({ prompt })
-    return response.text
+    const { text: summary } = await llmClient.generateText({ prompt })
+
+    await reviewRepository.storeReviewSummary(productId, summary)
+
+    return summary
   },
 }

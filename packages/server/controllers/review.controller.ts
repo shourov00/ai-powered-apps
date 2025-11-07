@@ -1,5 +1,7 @@
 import type { Request, Response } from 'express'
 import { reviewService } from '../services/review.service.ts'
+import { productRepository } from '../repositories/product.repository.ts'
+import { reviewRepository } from '../repositories/review.repository.ts'
 
 export const reviewController = {
   async getReviews(req: Request, res: Response) {
@@ -18,6 +20,15 @@ export const reviewController = {
 
     if (isNaN(productId))
       return res.status(400).json({ error: 'Invalid product ID' })
+
+    const product = await productRepository.getProduct(productId)
+    if (!product) return res.status(400).json({ error: 'Invalid product' })
+
+    const reviews = await reviewRepository.getReviews(productId, 1)
+    if (!reviews.length)
+      return res
+        .status(400)
+        .json({ error: 'No reviews for this product to summarize' })
 
     const summary = await reviewService.summarizeReviews(productId)
     res.json({ summary })
