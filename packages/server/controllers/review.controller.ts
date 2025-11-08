@@ -10,9 +10,13 @@ export const reviewController = {
     if (isNaN(productId))
       return res.status(400).json({ error: 'Invalid product ID' })
 
-    const reviews = await reviewService.getReviews(productId)
+    const reviews = await reviewRepository.getReviews(productId)
+    const summary = await reviewRepository.getReviewSummary(productId)
 
-    res.json(reviews)
+    res.json({
+      summary,
+      reviews,
+    })
   },
 
   async summarizeReviews(req: Request, res: Response) {

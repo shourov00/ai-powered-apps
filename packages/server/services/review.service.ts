@@ -3,15 +3,9 @@ import { reviewRepository } from '../repositories/review.repository.ts'
 import { llmClient } from '../llm/client.ts'
 
 export const reviewService = {
-  getReviews(productId: number): Promise<Review[]> {
-    return reviewRepository.getReviews(productId)
-  },
-
   async summarizeReviews(productId: number): Promise<string> {
     const existingSummary = await reviewRepository.getReviewSummary(productId)
-    if (existingSummary && existingSummary.expiresAt > new Date()) {
-      return existingSummary.content
-    }
+    if (existingSummary) return existingSummary
 
     // Get the last 10 reviews
     // Send the reviews to a LLM for summarization

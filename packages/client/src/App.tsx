@@ -1,9 +1,10 @@
-import ChatBot from '@/components/chat/ChatBot.tsx'
+import ReviewList from '@/components/reviews/ReviewList.tsx'
 
 function App() {
   return (
     <div className={'p-6 h-screen container mx-auto'}>
-      <ChatBot />
+      {/*<ChatBot />*/}
+      <ReviewList productId={1} />
     </div>
   )
 }
